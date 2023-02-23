@@ -1,2 +1,0 @@
-# enesBerkSakalli.github.io
-Webpage
