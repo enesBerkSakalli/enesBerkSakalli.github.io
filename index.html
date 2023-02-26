@@ -12,14 +12,14 @@
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
             crossorigin="anonymous"></script>
 
-        <link href="https://bootswatch.com/5/morph/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <link href="https://bootswatch.com/5/lux/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        <link rel="apple-touch-icon" sizes="180x180" href="./pictures/favicon/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="./pictures/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="./pictures/favicon/favicon-16x16.png">
-        <link rel="manifest" href="./pictures/favicon/site.webmanifest">
+        <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
+        <link rel="manifest" href="./assets/favicon/site.webmanifest">
 
         <meta http-equiv="refresh" content="30">
         <meta name="keywords"
@@ -115,57 +115,74 @@
             </div>
         </nav>
 
-        <div class="pt-5 m-5">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h1>Enes Berk Sakalli Portfolio</h1>
+        <script type="module"
+            src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.1/model-viewer.min.js"></script>
+
+        <div class="container">
+            <div class="row">
+                <model-viewer src="./assets/objects/BM86_Portable.glb" ar ar-modes="webxr scene-viewer quick-look"
+                    camera-controls poster="./assets/objects/poster.webp" shadow-intensity="1" autoplay
+                    camera-orbit="46.87deg 76.92deg 1.339m" field-of-view="30deg" style="height:400px" auto-rotate>
+                    <div class="progress-bar hide" slot="progress-bar">
+                        <div class="update-bar"></div>
+                    </div>
+                </model-viewer>
+
+                <div class="progress-bar hide" slot="progress-bar">
+                    <div class="update-bar"></div>
                 </div>
+            </div>
+
+
+        </div>
+
+        <div class="mt-1">
+            <div class="text-center">
+                <h1>Enes Berk Sakalli Portfolio</h1>
             </div>
         </div>
 
 
         <div class="d-lg-none pt-2">
-            <div class="card bg-light m-5">
+            <div class="card bg-primary m-5">
                 <div class="card-header text-center">
-                    <h2>Social Media</h2>
+                    Social Media
                 </div>
                 <div class="card-body">
                     <div class="d-flex aligns-items-center justify-content-center">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item list-group-item-action">
-                                <a href="https://www.instagram.com/enesberksakalli/?hl=en">
-                                    <i class="fa fa-instagram"></i>
-                                    Instagram
-                                </a>
-                            </li>
 
-                            <li class="list-group-item list-group-item-action">
-                                <a href="https://twitter.com/EnesBerkZeki">
-                                    <i class="fa fa-twitter" aria-hidden="true"></i>
-                                    Twitter
-                                </a>
-                            </li>
+                        <div class="list-group">
 
-                            <li class="list-group-item list-group-item-action">
-                                <a href="https://www.youtube.com/watch?v=U810FGovsnc">
-                                    <i class="fa fa-youtube" aria-hidden="true"></i>
-                                    Youtube
-                                </a>
-                            </li>
+                            <a class="list-group-item list-group-item-action active"
+                                href="https://www.instagram.com/enesberksakalli/?hl=en">
+                                <i class="fa fa-instagram"></i>
+                                Instagram
+                            </a>
 
-                            <li class="list-group-item list-group-item-action">
-                                <a href="https://www.linkedin.com/in/enes-berk-sakalli-33856b150/">
-                                    <i class="fa fa-linkedin" aria-hidden="true"></i>
-                                    Linkedin
-                                </a>
-                            </li>
+                            <a class="list-group-item list-group-item-action active"
+                                href="https://twitter.com/EnesBerkZeki">
+                                <i class="fa fa-twitter" aria-hidden="true"></i>
+                                Twitter
+                            </a>
 
-                            <li class="list-group-item list-group-item-action">
-                                <a href="./about.html">
-                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                                    About</a>
-                            </li>
-                        </ul>
+                            <a class="list-group-item list-group-item-action active"
+                                href="https://www.youtube.com/watch?v=U810FGovsnc">
+                                <i class="fa fa-youtube" aria-hidden="true"></i>
+                                Youtube
+                            </a>
+
+                            <a class="list-group-item list-group-item-action active"
+                                href="https://www.linkedin.com/in/enes-berk-sakalli-33856b150/">
+                                <i class="fa fa-linkedin" aria-hidden="true"></i>
+                                Linkedin
+                            </a>
+
+                            <a class="list-group-item list-group-item-action active" href="./about.html">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                About</a>
+
+                        </div>
+
                     </div>
 
                 </div>
