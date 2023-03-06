@@ -62,22 +62,18 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <div>
-                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                        <span>
-                            <i class="fa fa-flag"></i>
-                        </span>
-                    </button>
-                </div>
 
-                <div class="pl-2">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                    <span>
+                        <i class="fa fa-flag"></i>
+                    </span>
+                </button>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
+                    aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <div class="collapse navbar-collapse" id="navbarColor03">
                     <ul class="navbar-nav me-auto">
@@ -142,7 +138,8 @@
             <div class="row">
                 <model-viewer src="./assets/objects/cell_shaded_double_helix.glb" ar
                     ar-modes="webxr scene-viewer quick-look" camera-controls poster="./assets/objects/poster.webp"
-                    shadow-intensity="1" autoplay style="height:400px">
+                    shadow-intensity="1" camera-orbit="0deg 75deg 555.1m" field-of-view="12deg" autoplay
+                    style="height:400px">
                     <div class="progress-bar hide" slot="progress-bar">
                         <div class="update-bar"></div>
                     </div>
@@ -279,7 +276,7 @@
                     </div>
                 </div>
             </div>
-
+        </div>
 
     </body>
 
