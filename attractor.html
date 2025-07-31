@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Particle Simulation (with Multifurcations)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1f2937;
+            overflow: hidden;
+        }
+        #right-column {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 400px;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .right-panel {
+            background-color: rgba(243, 244, 246, 0.8);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+        #tree-panel {
+            height: 100%;
+        }
+        #tree-vis {
+            flex-grow: 1;
+            background-color: #f9fafb;
+            border-radius: 0.25rem;
+            overflow: auto;
+        }
+        #tree-vis .link {
+            fill: none;
+            stroke: #6b7280;
+            stroke-width: 1.5px;
+        }
+        #tree-vis .node text {
+            font-size: 11px;
+            fill: #1f2937;
+        }
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(243, 244, 246, 0.8);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .control-btn {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .control-btn:hover {
+            background-color: #d1d5db;
+        }
+        .control-btn:disabled {
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+        #step-slider {
+            -webkit-appearance: none;
+            width: 200px;
+            height: 8px;
+            background: #d1d5db;
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        #step-slider:hover {
+            opacity: 1;
+        }
+        #step-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        #step-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="right-column">
+        <div id="tree-panel" class="right-panel">
+            <h2 class="text-lg font-bold text-gray-800 mb-2">NJ Tree Visualization</h2>
+            <div id="tree-vis"></div>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button id="reset-btn" class="control-btn">Reset</button>
+        <button id="play-pause-btn" class="control-btn">Play</button>
+        <input type="range" min="0" max="15" value="0" step="0.01" id="step-slider">
+        <span id="step-display" class="text-gray-700 font-mono w-28 text-center">Step: 0.00</span>
+        <button id="nj-btn" class="control-btn">Calculate NJ Tree</button>
+    </div>
+
+    <script>
+        // --- 0. UTILITIES (Simplex Noise and Randomness) ---
+        class SimplexNoise {
+          constructor(r) { this.grad3 = [[1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0], [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1], [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]]; this.p = []; for (var i = 0; i < 256; i++) { this.p[i] = Math.floor(r.random() * 256); } this.perm = []; for (var i = 0; i < 512; i++) { this.perm[i] = this.p[i & 255]; } }
+          dot(g, x, y, z) { return g[0] * x + g[1] * y + g[2] * z; }
+          noise(xin, yin, zin) { var n0, n1, n2, n3; var F3 = 1 / 3; var s = (xin + yin + zin) * F3; var i = Math.floor(xin + s); var j = Math.floor(yin + s); var k = Math.floor(zin + s); var G3 = 1 / 6; var t = (i + j + k) * G3; var x0 = xin - i + t; var y0 = yin - j + t; var z0 = zin - k + t; var i1, j1, k1; var i2, j2, k2; if (x0 >= y0) { if (y0 >= z0) { i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 1; k2 = 0; } else if (x0 >= z0) { i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 0; k2 = 1; } else { i1 = 0; j1 = 0; k1 = 1; i2 = 1; j2 = 0; k2 = 1; } } else { if (y0 < z0) { i1 = 0; j1 = 0; k1 = 1; i2 = 0; j2 = 1; k2 = 1; } else if (x0 < z0) { i1 = 0; j1 = 1; k1 = 0; i2 = 0; j2 = 1; k2 = 1; } else { i1 = 0; j1 = 1; k1 = 0; i2 = 1; j2 = 1; k2 = 0; } } var x1 = x0 - i1 + G3; var y1 = y0 - j1 + G3; var z1 = z0 - k1 + G3; var x2 = x0 - i2 + 2 * G3; var y2 = y0 - j2 + 2 * G3; var z2 = z0 - k2 + 2 * G3; var x3 = x0 - 1 + 3 * G3; var y3 = y0 - 1 + 3 * G3; var z3 = z0 - 1 + 3 * G3; var gi0 = this.perm[i + this.perm[j + this.perm[k & 255] & 255] & 255] % 12; var gi1 = this.perm[i + i1 + this.perm[j + j1 + this.perm[k + k1 & 255] & 255] & 255] % 12; var gi2 = this.perm[i + i2 + this.perm[j + j2 + this.perm[k + k2 & 255] & 255] & 255] % 12; var gi3 = this.perm[i + 1 + this.perm[j + 1 + this.perm[k + 1 & 255] & 255] & 255] % 12; var t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0; if (t0 < 0) { n0 = 0; } else { t0 *= t0; n0 = t0 * t0 * this.dot(this.grad3[gi0], x0, y0, z0); } var t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1; if (t1 < 0) { n1 = 0; } else { t1 *= t1; n1 = t1 * t1 * this.dot(this.grad3[gi1], x1, y1, z1); } var t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2; if (t2 < 0) { n2 = 0; } else { t2 *= t2; n2 = t2 * t2 * this.dot(this.grad3[gi2], x2, y2, z2); } var t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3; if (t3 < 0) { n3 = 0; } else { t3 *= t3; n3 = t3 * t3 * this.dot(this.grad3[gi3], x3, y3, z3); } return 32 * (n0 + n1 + n2 + n3); }
+        }
+        
+        class SeededRandom {
+            constructor(seed) { this.seed = seed; }
+            random() { const x = Math.sin(this.seed++) * 10000; return x - Math.floor(x); }
+            uniform(min, max) { return min + (max - min) * this.random(); }
+            integers(min, max) { return Math.floor(this.uniform(min, max + 1)); }
+            normal(mu = 0, sigma = 1) { let u1, u2; do { u1 = this.random(); u2 = this.random(); } while (u1 <= 1e-6); const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2); return z0 * sigma + mu; }
+            choice(arr, p) {
+                const r = this.random();
+                let cumulative = 0;
+                for (let i = 0; i < p.length; i++) {
+                    cumulative += p[i];
+                    if (r < cumulative) {
+                        return arr[i];
+                    }
+                }
+                return arr[arr.length - 1];
+            }
+        }
+
+        // --- 1. SIMULATION LOGIC ---
+        const RNG_SEED = Date.now();
+        const rng = new SeededRandom(RNG_SEED);
+        const simplex = new SimplexNoise(rng);
+
+        const N_POINTS = 3000;
+        const PHASE_DURATION = 5;
+        const N_CENTROIDS = rng.integers(8, 20);
+        const SIGMA_TARGET = 0.1;
+        const LINEAR_FRAC = 0.7;
+        const AX_LIM = 2.5;
+
+        const N_GROUPS = rng.integers(3, 5);
+        const groupCenters = Array.from({ length: N_GROUPS }, () => new THREE.Vector3(rng.uniform(-2.0, 2.0), rng.uniform(-2.0, 2.0), rng.uniform(-2.0, 2.0)));
+        const initialCentroids = Array.from({ length: N_CENTROIDS }, () => {
+            const groupIndex = rng.integers(0, N_GROUPS - 1);
+            const center = groupCenters[groupIndex];
+            const offset = new THREE.Vector3(rng.normal(0, 0.6), rng.normal(0, 0.6), rng.normal(0, 0.6));
+            return new THREE.Vector3().addVectors(center, offset);
+        });
+
+        const clusters = Array.from({ length: N_POINTS }, () => rng.integers(0, N_CENTROIDS - 1));
+        const targets = clusters.map(c => { const centroid = initialCentroids[c]; const offset = new THREE.Vector3(rng.normal(0, SIGMA_TARGET), rng.normal(0, SIGMA_TARGET), rng.normal(0, SIGMA_TARGET)); return new THREE.Vector3().addVectors(centroid, offset); });
+        const modes = Array.from({ length: N_POINTS }, () => rng.choice([0, 1], [LINEAR_FRAC, 1 - LINEAR_FRAC]));
+        const v0 = Array.from({ length: N_POINTS }, () => new THREE.Vector3(rng.uniform(-0.2, 0.2), rng.uniform(-0.2, 0.2), rng.uniform(-0.2, 0.2)));
+        const acc = Array.from({ length: N_POINTS }, () => new THREE.Vector3(0, 0, 0));
+        modes.forEach((mode, i) => { if (mode === 1) { const t1 = targets[i].clone(); const t2 = v0[i].clone().multiplyScalar(PHASE_DURATION); acc[i] = t1.sub(t2).multiplyScalar(2 / (PHASE_DURATION * PHASE_DURATION)); } });
+
+        const traj = Array.from({ length: N_POINTS }, () => Array.from({ length: PHASE_DURATION + 1 }, () => new THREE.Vector3()));
+        for (let i = 0; i < N_POINTS; i++) { for (let t = 0; t <= PHASE_DURATION; t++) { if (modes[i] === 0) { traj[i][t] = targets[i].clone().multiplyScalar(t / PHASE_DURATION); } else { const t1 = v0[i].clone().multiplyScalar(t); const t2 = acc[i].clone().multiplyScalar(0.5 * t * t); traj[i][t] = t1.add(t2); } } }
+
+        const attractorIndices = Array.from({length: N_CENTROIDS}, (_, i) => i);
+        const cyclingAttractorIndex1 = attractorIndices.splice(rng.integers(0, attractorIndices.length - 1), 1)[0];
+        const cyclingAttractorIndex2 = attractorIndices.splice(rng.integers(0, attractorIndices.length - 1), 1)[0];
+        
+        const particleOffsets = targets.map((target, i) => new THREE.Vector3().subVectors(target, initialCentroids[clusters[i]]));
+
+        // --- 2. THREE.JS VISUALIZATION SETUP ---
+        let scene, camera, renderer, clock;
+        let particles, attractors3D = [];
+        let animationFrameId;
+        let isPlaying = false;
+        let currentStep = 0;
+        let njWorker;
+
+        const COLORS = [0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf];
+        const ptColors = clusters.map(c => new THREE.Color(COLORS[c % COLORS.length]));
+
+        const vertexShader = `
+            uniform float uPixelRatio;
+            attribute vec3 color;
+            varying vec3 vColor;
+            void main() {
+                vColor = color;
+                vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+                vec4 viewPosition = viewMatrix * modelPosition;
+                gl_Position = projectionMatrix * viewPosition;
+                gl_PointSize = 30.0 * uPixelRatio;
+                gl_PointSize *= (1.0 / -viewPosition.z);
+            }
+        `;
+        const fragmentShader = `
+            varying vec3 vColor;
+            void main() {
+                float dist = distance(gl_PointCoord, vec2(0.5));
+                if (dist > 0.5) discard;
+                gl_FragColor = vec4(vColor, 1.0);
+            }
+        `;
+
+        function init() {
+            clock = new THREE.Clock();
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff);
+            scene.fog = new THREE.Fog(0xffffff, 5, 20);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(3, 3, 5);
+            camera.lookAt(scene.position);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.body.appendChild(renderer.domElement);
+            
+            scene.add(new THREE.AmbientLight(0x404040, 3));
+            const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+            dirLight.position.set(5,10,7);
+            scene.add(dirLight);
+
+            const particleGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(N_POINTS * 3);
+            const colors = new Float32Array(N_POINTS * 3);
+            for (let i = 0; i < N_POINTS; i++) {
+                traj[i][0].toArray(positions, i * 3);
+                ptColors[i].toArray(colors, i * 3);
+            }
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            const particleMaterial = new THREE.ShaderMaterial({ 
+                vertexShader, 
+                fragmentShader, 
+                uniforms: { uPixelRatio: { value: renderer.getPixelRatio() } }, 
+                blending: THREE.NormalBlending, 
+                transparent: true, 
+                depthWrite: true 
+            });
+            particles = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particles);
+
+            for (let i = 0; i < N_CENTROIDS; i++) {
+                const attractorGroup = new THREE.Group();
+                const coreGeom = new THREE.SphereGeometry(0.06, 32, 16);
+                const coreMat = new THREE.MeshStandardMaterial({ color: COLORS[i % COLORS.length], emissive: COLORS[i % COLORS.length], emissiveIntensity: 0.2, metalness: 0.1, roughness: 0.5 });
+                const core = new THREE.Mesh(coreGeom, coreMat);
+                attractorGroup.add(core);
+
+                const wireGeom = new THREE.SphereGeometry(0.07, 16, 8);
+                const wireMat = new THREE.MeshBasicMaterial({ color: "#374151", wireframe: true, transparent: true, opacity: 0.5 });
+                attractorGroup.add(new THREE.Mesh(wireGeom, wireMat));
+
+                attractorGroup.position.copy(initialCentroids[i]);
+                attractors3D.push({ group: attractorGroup, core: core });
+                scene.add(attractorGroup);
+            }
+
+            scene.add(new THREE.Mesh(new THREE.TorusKnotGeometry(0.08, 0.02, 100, 16), new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.8, roughness: 0.2 })));
+            scene.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(AX_LIM * 2, AX_LIM * 2, AX_LIM * 2)), new THREE.LineBasicMaterial({ color: 0xd1d5db, transparent: true, opacity: 0.8 })));
+
+            setupNJWorker();
+            window.addEventListener('resize', onWindowResize, false);
+            document.getElementById('play-pause-btn').addEventListener('click', togglePlay);
+            document.getElementById('reset-btn').addEventListener('click', resetSimulation);
+            document.getElementById('step-slider').addEventListener('input', onSliderChange);
+            document.getElementById('nj-btn').addEventListener('click', calculateNJTree);
+
+            animate();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            particles.material.uniforms.uPixelRatio.value = renderer.getPixelRatio();
+        }
+
+        function updateParticlePositions(step, elapsedTime) {
+            const positions = particles.geometry.attributes.position.array;
+            const basePos = new THREE.Vector3();
+            const noiseVec = new THREE.Vector3();
+            
+            const noiseStrength = 0.2;
+            const noiseSpeed = 0.5;
+            const noiseScale = 2.0;
+
+            for (let i = 0; i < N_POINTS; i++) {
+                const clusterId = clusters[i];
+                const isCycling1 = (clusterId === cyclingAttractorIndex1);
+                const isCycling2 = (clusterId === cyclingAttractorIndex2);
+
+                if (step <= PHASE_DURATION) { // Phase 1
+                    const floorStep = Math.floor(step);
+                    const ceilStep = Math.min(Math.ceil(step), PHASE_DURATION);
+                    const t = step - floorStep;
+                    basePos.lerpVectors(traj[i][floorStep], traj[i][ceilStep], t);
+                } else if (step <= PHASE_DURATION * 2) { // Phase 2
+                    const t = (step - PHASE_DURATION) / PHASE_DURATION;
+                    const homePos = traj[i][PHASE_DURATION];
+                    let targetPos = homePos;
+
+                    if (isCycling1) {
+                        const destination = new THREE.Vector3().addVectors(initialCentroids[cyclingAttractorIndex2], particleOffsets[i]);
+                        targetPos = new THREE.Vector3().lerpVectors(homePos, destination, t);
+                    } else if (isCycling2) {
+                        const destination = new THREE.Vector3().addVectors(initialCentroids[cyclingAttractorIndex1], particleOffsets[i]);
+                        targetPos = new THREE.Vector3().lerpVectors(homePos, destination, t);
+                    }
+                    basePos.copy(targetPos);
+                } else { // Phase 3
+                    const t = (step - PHASE_DURATION * 2) / PHASE_DURATION;
+                    const awayPos1 = new THREE.Vector3().addVectors(initialCentroids[cyclingAttractorIndex2], particleOffsets[i]);
+                    const awayPos2 = new THREE.Vector3().addVectors(initialCentroids[cyclingAttractorIndex1], particleOffsets[i]);
+                    const homePos = traj[i][PHASE_DURATION];
+                    let targetPos = homePos;
+
+                    if (isCycling1) {
+                        targetPos = new THREE.Vector3().lerpVectors(awayPos1, homePos, t);
+                    } else if (isCycling2) {
+                         targetPos = new THREE.Vector3().lerpVectors(awayPos2, homePos, t);
+                    }
+                     basePos.copy(targetPos);
+                }
+
+                const noiseX = simplex.noise(basePos.x * noiseScale, basePos.y * noiseScale, elapsedTime * noiseSpeed) * noiseStrength;
+                const noiseY = simplex.noise(basePos.y * noiseScale, basePos.z * noiseScale, elapsedTime * noiseSpeed) * noiseStrength;
+                const noiseZ = simplex.noise(basePos.z * noiseScale, basePos.x * noiseScale, elapsedTime * noiseSpeed) * noiseStrength;
+                basePos.add(noiseVec.set(noiseX, noiseY, noiseZ));
+
+                basePos.toArray(positions, i * 3);
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+        }
+
+        function animate() {
+            animationFrameId = requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            if (isPlaying) {
+                currentStep += 0.01;
+                if (currentStep > PHASE_DURATION * 3) {
+                    currentStep = PHASE_DURATION * 3;
+                    isPlaying = false;
+                    document.getElementById('play-pause-btn').textContent = 'Play';
+                }
+                document.getElementById('step-slider').value = currentStep;
+            }
+            
+            attractors3D.forEach((attractor, i) => {
+                const time = elapsedTime * 0.2;
+                const pulse = 1.5 + Math.sin(time * 5 + i) * 0.5;
+                attractor.core.material.emissiveIntensity = pulse * 0.2;
+            });
+
+            updateParticlePositions(currentStep, elapsedTime);
+            document.getElementById('step-display').textContent = `Step: ${parseFloat(currentStep).toFixed(2)}`;
+
+            const cameraAngle = elapsedTime * 0.1;
+            camera.position.x = Math.sin(cameraAngle) * 5;
+            camera.position.z = Math.cos(cameraAngle) * 5;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            if (isPlaying && currentStep >= PHASE_DURATION * 3) {
+                resetSimulation();
+            }
+            document.getElementById('play-pause-btn').textContent = isPlaying ? 'Pause' : 'Play';
+        }
+
+        function resetSimulation() {
+            window.location.reload();
+        }
+
+        function onSliderChange(event) {
+            isPlaying = false;
+            document.getElementById('play-pause-btn').textContent = 'Play';
+            currentStep = parseFloat(event.target.value);
+            updateParticlePositions(currentStep, clock.getElapsedTime());
+        }
+
+        // --- NJ Tree Calculation ---
+        function setupNJWorker() {
+            const workerCode = `
+                function pdist(positions) {
+                    const n = positions.length / 3;
+                    const distances = [];
+                    for (let i = 0; i < n; i++) {
+                        for (let j = i + 1; j < n; j++) {
+                            const dx = positions[i * 3] - positions[j * 3];
+                            const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                            const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                            distances.push(Math.sqrt(dx*dx + dy*dy + dz*dz));
+                        }
+                    }
+                    return distances;
+                }
+
+                function squareform(distances, n) {
+                    const D = Array.from({ length: n }, () => new Float64Array(n));
+                    let k = 0;
+                    for (let i = 0; i < n; i++) {
+                        for (let j = i + 1; j < n; j++) {
+                            D[i][j] = D[j][i] = distances[k++];
+                        }
+                    }
+                    return D;
+                }
+
+                function neighborJoining(D_matrix, labels) {
+                    let nodes = labels.map((label, i) => ({ id: i, name: label, branch_length: 0 }));
+                    let active_nodes = [...nodes];
+                    let D = D_matrix.map(row => [...row]);
+                    let next_idx = labels.length;
+
+                    while (active_nodes.length > 2) {
+                        const N = active_nodes.length;
+                        const rowSums = new Map(active_nodes.map(node => [node.id, active_nodes.reduce((sum, otherNode) => sum + D[node.id][otherNode.id], 0)]));
+                        
+                        let best_q = Infinity;
+                        let pair = [null, null];
+
+                        for (let i_idx = 0; i_idx < N; i_idx++) {
+                            for (let j_idx = i_idx + 1; j_idx < N; j_idx++) {
+                                const node_i = active_nodes[i_idx];
+                                const node_j = active_nodes[j_idx];
+                                const q = (N - 2) * D[node_i.id][node_j.id] - rowSums.get(node_i.id) - rowSums.get(node_j.id);
+                                if (q < best_q) {
+                                    best_q = q;
+                                    pair = [node_i, node_j];
+                                }
+                            }
+                        }
+                        
+                        const [node_i, node_j] = pair;
+                        const delta = (rowSums.get(node_i.id) - rowSums.get(node_j.id)) / (N - 2);
+                        node_i.branch_length = 0.5 * (D[node_i.id][node_j.id] + delta);
+                        node_j.branch_length = 0.5 * (D[node_i.id][node_j.id] - delta);
+
+                        const new_node = { id: next_idx, children: [node_i, node_j] };
+                        
+                        if (next_idx >= D.length) {
+                           const newSize = next_idx + 1;
+                           const newD = Array.from({length: newSize}, () => new Float64Array(newSize));
+                           for(let r=0; r < D.length; r++) { for(let c=0; c < D.length; c++) { newD[r][c] = D[r][c]; } }
+                           D = newD;
+                        }
+
+                        for (const k_node of active_nodes) {
+                            if (k_node.id !== node_i.id && k_node.id !== node_j.id) {
+                                D[new_node.id][k_node.id] = D[k_node.id][new_node.id] = 0.5 * (D[node_i.id][k_node.id] + D[node_j.id][k_node.id] - D[node_i.id][node_j.id]);
+                            }
+                        }
+                        
+                        active_nodes = active_nodes.filter(n => n.id !== node_i.id && n.id !== node_j.id);
+                        active_nodes.push(new_node);
+                        next_idx++;
+                    }
+                    
+                    const [node_a, node_b] = active_nodes;
+                    node_a.branch_length = node_b.branch_length = D[node_a.id][node_b.id] / 2;
+                    return { id: next_idx, children: [node_a, node_b] };
+                }
+                
+                function collapseShortBranches(node, threshold) {
+                    if (!node.children) return;
+
+                    // Recurse first
+                    for (let i = 0; i < node.children.length; i++) {
+                        collapseShortBranches(node.children[i], threshold);
+                    }
+
+                    // Then process current node's children
+                    const newChildren = [];
+                    for (const child of node.children) {
+                        if (child.children && child.branch_length < threshold) {
+                            newChildren.push(...child.children);
+                        } else {
+                            newChildren.push(child);
+                        }
+                    }
+                    node.children = newChildren;
+                }
+
+                function treeToNewick(node) {
+                    if (node.children) {
+                        return '(' + node.children.map(treeToNewick).join(',') + ')' + (node.name ? node.name : '') + (node.branch_length ? ':' + node.branch_length.toFixed(5) : '');
+                    }
+                    return node.name + (node.branch_length ? ':' + node.branch_length.toFixed(5) : '');
+                }
+
+
+                self.onmessage = function(e) {
+                    const { positions, labels } = e.data;
+                    const n = positions.length / 3;
+                    
+                    const sampleSize = 200;
+                    const sampledIndices = new Set();
+                    while(sampledIndices.size < sampleSize && sampledIndices.size < n) {
+                        sampledIndices.add(Math.floor(Math.random() * n));
+                    }
+                    
+                    const sampledPositions = [];
+                    const sampledLabels = [];
+                    for(const index of sampledIndices) {
+                        sampledPositions.push(positions[index*3], positions[index*3+1], positions[index*3+2]);
+                        sampledLabels.push(labels[index]);
+                    }
+
+                    const distances = pdist(sampledPositions);
+                    const D_matrix = squareform(distances, sampledPositions.length / 3);
+                    const tree = neighborJoining(D_matrix, sampledLabels);
+                    collapseShortBranches(tree, 0.0001);
+                    const newickTree = treeToNewick(tree) + ';';
+                    self.postMessage(newickTree);
+                };
+            `;
+            const blob = new Blob([workerCode], { type: 'application/javascript' });
+            njWorker = new Worker(URL.createObjectURL(blob));
+
+            njWorker.onmessage = function(e) {
+                console.log("Newick String:", e.data);
+                renderDendrogram(e.data);
+                document.getElementById('nj-btn').disabled = false;
+                document.getElementById('nj-btn').textContent = 'Calculate NJ Tree';
+            };
+        }
+
+        function calculateNJTree() {
+            const njBtn = document.getElementById('nj-btn');
+            
+            njBtn.disabled = true;
+            njBtn.textContent = 'Calculating...';
+            d3.select("#tree-vis > svg").remove();
+
+            const positions = particles.geometry.attributes.position.array;
+            const labels = clusters.map(c => `Attractor_${c}`);
+            
+            const positionsCopy = new Float32Array(positions);
+            njWorker.postMessage({ positions: positionsCopy, labels });
+        }
+
+        function newickParse(text) {
+            var ancestors = [];
+            var tree = {};
+            var tokens = text.split(/\s*(;|\(|\)|,|:)\s*/);
+            for (var i=0; i<tokens.length; i++) {
+                var token = tokens[i];
+                switch (token) {
+                    case '(': // new children
+                        var subtree = {};
+                        tree.children = [subtree];
+                        ancestors.push(tree);
+                        tree = subtree;
+                        break;
+                    case ',': // another branch
+                        var subtree = {};
+                        ancestors[ancestors.length-1].children.push(subtree);
+                        tree = subtree;
+                        break;
+                    case ')': // optional name next
+                        tree = ancestors.pop();
+                        break;
+                    case ':': // optional length next
+                        break;
+                    default:
+                        var x = tokens[i-1];
+                        if (x == ')' || x == '(' || x == ',') {
+                            if(token.trim()){
+                                tree.name = token;
+                            }
+                        } else if (x == ':') {
+                            tree.branch_length = parseFloat(token);
+                        }
+                }
+            }
+            return tree;
+        }
+
+        function renderDendrogram(newick) {
+            try {
+                const attractorColors = {};
+                clusters.forEach((c, i) => {
+                    if(!attractorColors[`Attractor_${c}`]) {
+                        attractorColors[`Attractor_${c}`] = '#' + ptColors[i].getHexString();
+                    }
+                });
+                
+                const container = document.getElementById('tree-vis');
+                d3.select(container).select("svg").remove();
+
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+
+                const cluster = d3.layout.cluster()
+                    .size([height - 20, width - 160]);
+
+                const diagonal = d3.svg.diagonal()
+                    .projection(d => [d.y, d.x]);
+
+                const svg = d3.select(container).append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .append("g")
+                    .attr("transform", "translate(40,10)");
+
+                const root = newickParse(newick);
+                const nodes = cluster.nodes(root);
+                const links = cluster.links(nodes);
+
+                svg.selectAll(".link")
+                    .data(links)
+                    .enter().append("path")
+                    .attr("class", "link")
+                    .attr("d", diagonal);
+
+                const node = svg.selectAll(".node")
+                    .data(nodes)
+                    .enter().append("g")
+                    .attr("class", "node")
+                    .attr("transform", d => `translate(${d.y},${d.x})`);
+
+                node.append("circle")
+                    .attr("r", 4.5)
+                    .style("fill", d => d.children ? "#6b7280" : attractorColors[d.name] || "#6b7280");
+
+                node.append("text")
+                    .attr("dx", d => d.children ? -8 : 8)
+                    .attr("dy", 3)
+                    .style("text-anchor", d => d.children ? "end" : "start")
+                    .style("fill", d => attractorColors[d.name] || "#374151")
+                    .text(d => d.name);
+
+            } catch (error) {
+                console.error("Error rendering tree:", error);
+            }
+        }
+        
+        window.addEventListener('load', function() {
+            init();
+        });
+    </script>
+</body>
+</html>
