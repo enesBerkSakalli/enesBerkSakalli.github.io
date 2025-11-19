@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quantum Wave Collapse Visualization</title>
+    <style>
+      :root {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #05060a;
+        color: #e2e8f0;
+      }
+      body {
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .dashboard {
+        max-width: 1300px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        grid-template-rows: auto auto;
+        gap: 24px;
+      }
+
+      /* --- STYLING --- */
+      .panel {
+        background: #0f111a;
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+      }
+      .panel h3 {
+        margin: 0 0 15px 0;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #94a3b8;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+      }
+
+      /* Controls Area */
+      .controls {
+        grid-column: 1 / -1;
+        background: #1e293b;
+        padding: 20px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .slider-group {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        gap: 8px;
+      }
+      input[type="range"] {
+        cursor: pointer;
+        width: 100%;
+      }
+      .btn-group {
+        display: flex;
+        gap: 12px;
+      }
+      button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      button:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+      }
+      button.secondary {
+        background: #334155;
+      }
+      button.secondary:hover {
+        background: #475569;
+      }
+
+      /* Canvases */
+      canvas {
+        width: 100%;
+        height: auto;
+        display: block;
+        background: radial-gradient(circle at top left, #1a1d2b, #05060a);
+        border-radius: 8px;
+      }
+
+      /* Layout Tweaks */
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .main-stage {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .stat-card {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 10px;
+        border-radius: 6px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .stat-num {
+        font-size: 1.5rem;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .stat-label {
+        font-size: 0.7rem;
+        color: #aaa;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <div class="controls">
+        <div class="slider-group">
+          <div style="display: flex; justify-content: space-between">
+            <label style="font-weight: 600; color: #e2e8f0"
+              >Quantum Angle (θ)</label
+            >
+            <span
+              id="thetaDisplay"
+              style="font-family: monospace; color: #60a5fa"
+              >0.79 rad</span
+            >
+          </div>
+          <input
+            type="range"
+            id="thetaSlider"
+            min="0"
+            max="6.28"
+            step="0.01"
+            value="0.79"
+          />
+        </div>
+        <div class="btn-group">
+          <button id="btnFire">FIRE WAVE</button>
+          <button id="btnAuto" class="secondary">Auto-Fire: OFF</button>
+          <button id="btnReset" class="secondary">Reset</button>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="panel">
+          <h3>Qubit State (Bloch Sphere)</h3>
+          <canvas id="blochCanvas" width="260" height="260"></canvas>
+        </div>
+
+        <div class="panel">
+          <h3>Measurement Probabilities</h3>
+          <canvas id="probCanvas" width="260" height="120"></canvas>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div id="count0" class="stat-num" style="color: #4af">0</div>
+              <div class="stat-label">Measured |0⟩</div>
+            </div>
+            <div class="stat-card">
+              <div id="count1" class="stat-num" style="color: #f43f5e">0</div>
+              <div class="stat-label">Measured |1⟩</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-stage">
+        <div class="panel">
+          <h3 style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.3)">
+            Experiment A: Interference (Wave → Collapse)
+          </h3>
+          <canvas id="slitCanvas" width="900" height="300"></canvas>
+        </div>
+
+        <div class="panel">
+          <h3 style="color: #4af; border-color: rgba(74, 170, 255, 0.3)">
+            Experiment B: Spin Deflection (Wave → Collapse)
+          </h3>
+          <canvas id="prismCanvas" width="900" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* --- CONFIGURATION --- */
+      const state = {
+        theta: 0.79,
+        autoFire: false,
+        slitParticles: [],
+        slitImpacts: [],
+        prismParticles: [],
+        counts: { zero: 0, one: 0 },
+        flash0: 0,
+        flash1: 0,
+        time: 0, // Global time for wave oscillation
+      };
+
+      const CFG = {
+        slitY: 100,
+        screenY: 250,
+        srcX: 450,
+        srcY: 30,
+        prismY: 110,
+        detX: 800,
+        detY0: 50,
+        detY1: 170,
+      };
+
+      /* --- CANVAS SETUP --- */
+      const ctxs = {
+        bloch: document.getElementById("blochCanvas").getContext("2d"),
+        prob: document.getElementById("probCanvas").getContext("2d"),
+        slit: document.getElementById("slitCanvas").getContext("2d"),
+        prism: document.getElementById("prismCanvas").getContext("2d"),
+      };
+
+      /* --- PHYSICS CLASSES --- */
+
+      class SlitPhoton {
+        constructor(theta) {
+          this.x = CFG.srcX;
+          this.y = CFG.srcY;
+          this.slitTargetX = CFG.srcX + (Math.random() > 0.5 ? 25 : -25);
+          this.finalX = this.calculateInterference(theta);
+          this.stage = 0;
+          this.speed = 4; // Slower speed to see the wave effect better
+          this.phase = Math.random() * Math.PI * 2; // Random wave starting phase
+        }
+
+        calculateInterference(theta) {
+          for (let i = 0; i < 50; i++) {
+            const x = 50 + Math.random() * 800;
+            const normX = (x - 450) / 400;
+            const k = 12;
+            const phase = k * normX + theta / 2;
+            const prob = Math.pow(Math.cos(phase), 2);
+            if (Math.random() < prob) return x;
+          }
+          return 450;
+        }
+
+        update() {
+          if (this.stage === 0) {
+            const dx = this.slitTargetX - this.x;
+            const dy = CFG.slitY - this.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < this.speed) {
+              this.x = this.slitTargetX;
+              this.y = CFG.slitY;
+              this.stage = 1;
+            } else {
+              this.x += (dx / dist) * this.speed;
+              this.y += (dy / dist) * this.speed;
+            }
+          } else {
+            const dx = this.finalX - this.x;
+            const dy = CFG.screenY - this.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < this.speed) {
+              state.slitImpacts.push(this.finalX); // COLLAPSE to position
+              return true;
+            } else {
+              this.x += (dx / dist) * this.speed;
+              this.y += (dy / dist) * this.speed;
+            }
+          }
+          return false;
+        }
+      }
+
+      class PrismParticle {
+        constructor(theta) {
+          this.x = 50;
+          this.y = CFG.prismY;
+          this.vx = 5;
+          this.vy = 0;
+          this.stage = "approach";
+          this.phase = Math.random() * Math.PI * 2;
+          const p0 = Math.pow(Math.cos(theta / 2), 2);
+          this.fate = Math.random() < p0 ? 0 : 1;
+        }
+
+        update() {
+          if (this.stage === "approach") {
+            this.x += this.vx;
+            if (this.x > 350) this.stage = "inside";
+          } else if (this.stage === "inside") {
+            this.x += this.vx * 0.8;
+            const targetVy = this.fate === 0 ? -2 : 2;
+            this.vy += (targetVy - this.vy) * 0.1;
+            this.y += this.vy;
+            if (this.x > 450) this.stage = "flying";
+          } else {
+            const tx = CFG.detX;
+            const ty = this.fate === 0 ? CFG.detY0 : CFG.detY1;
+            const dx = tx - this.x,
+              dy = ty - this.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 10) {
+              if (this.fate === 0) {
+                state.counts.zero++;
+                state.flash0 = 5;
+              } else {
+                state.counts.one++;
+                state.flash1 = 5;
+              }
+              return true; // COLLAPSE
+            }
+            this.x += (dx / dist) * this.vx;
+            this.y += (dy / dist) * this.vx;
+          }
+          return false;
+        }
+      }
+
+      /* --- HELPER: DRAW WAVE PACKET --- */
+      function drawWavePacket(ctx, x, y, phase, color) {
+        // 1. Oscillating offset (The Wiggle)
+        // We add a sine wave vertical offset based on X position and Time
+        const wiggle = Math.sin(x * 0.1 + state.time) * 3;
+        const Y = y + wiggle;
+
+        // 2. Probability Cloud (Gradient)
+        const radius = 12;
+        const grad = ctx.createRadialGradient(x, Y, 0, x, Y, radius);
+
+        // Core is bright, edges fade out
+        grad.addColorStop(0, "rgba(255, 255, 255, 1)");
+        grad.addColorStop(0.3, color); // Tint
+        grad.addColorStop(1, "rgba(255, 255, 255, 0)"); // Transparent
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(x, Y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      /* --- DRAWING FUNCTIONS --- */
+
+      function drawSlitSystem() {
+        const ctx = ctxs.slit;
+        const w = 900,
+          h = 300;
+        ctx.clearRect(0, 0, w, h);
+
+        // Background Elements
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.arc(CFG.srcX, CFG.srcY, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#2d3748";
+        ctx.fillRect(0, CFG.slitY, w, 6);
+        ctx.clearRect(CFG.srcX - 25, CFG.slitY, 10, 6);
+        ctx.clearRect(CFG.srcX + 15, CFG.slitY, 10, 6);
+
+        // Ghost Wave
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(70, 130, 255, 0.3)";
+        ctx.lineWidth = 2;
+        for (let x = 50; x < w - 50; x += 4) {
+          const normX = (x - 450) / 400;
+          const phase = 12 * normX + state.theta / 2;
+          const y = CFG.screenY - Math.pow(Math.cos(phase), 2) * 60;
+          if (x === 50) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // Screen
+        ctx.strokeStyle = "#555";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(50, CFG.screenY);
+        ctx.lineTo(w - 50, CFG.screenY);
+        ctx.stroke();
+
+        // Collapsed Particles (Gold Pile)
+        const binSize = 5;
+        const bins = new Array(Math.ceil(w / binSize)).fill(0);
+        state.slitImpacts.forEach((x) => bins[Math.floor(x / binSize)]++);
+
+        ctx.fillStyle = "#fbbf24";
+        for (let i = 0; i < bins.length; i++) {
+          if (bins[i] > 0) {
+            const hBar = bins[i] * 2;
+            // Draw solid rectangles (collapsed state)
+            ctx.fillRect(i * binSize, CFG.screenY - hBar, binSize, hBar);
+          }
+        }
+
+        // Flying Waves
+        state.slitParticles.forEach((p) => {
+          // Use the new Wave Packet drawer
+          drawWavePacket(ctx, p.x, p.y, p.phase, "rgba(100, 200, 255, 0.5)");
+        });
+      }
+
+      function drawPrismSystem() {
+        const ctx = ctxs.prism;
+        const w = 900,
+          h = 220;
+        ctx.clearRect(0, 0, w, h);
+
+        // Source
+        ctx.strokeStyle = "#555";
+        ctx.strokeRect(30, CFG.prismY - 15, 30, 30);
+        ctx.fillStyle = "#888";
+        ctx.font = "10px sans-serif";
+        ctx.fillText("SRC", 35, CFG.prismY + 4);
+
+        // Prism
+        ctx.save();
+        ctx.translate(400, CFG.prismY);
+        ctx.rotate(state.theta / 2);
+        ctx.fillStyle = "rgba(59, 130, 246, 0.15)";
+        ctx.strokeStyle = "#3b82f6";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-30, -30);
+        ctx.lineTo(30, -50);
+        ctx.lineTo(30, 50);
+        ctx.lineTo(-30, 30);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        // Detectors
+        const drawDet = (y, color, flash, label) => {
+          // Flash represents the COLLAPSE event visually
+          ctx.fillStyle = flash > 0 ? "#fff" : "rgba(255,255,255,0.05)";
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          if (flash > 0) {
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 20;
+          }
+          ctx.strokeRect(CFG.detX, y, 40, 40);
+          ctx.fillRect(CFG.detX, y, 40, 40);
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = color;
+          ctx.font = "bold 14px sans-serif";
+          ctx.fillText(label, CFG.detX + 50, y + 25);
+        };
+        drawDet(CFG.detY0, "#4af", state.flash0, "|0⟩");
+        drawDet(CFG.detY1, "#f43f5e", state.flash1, "|1⟩");
+
+        // Flying Waves
+        state.prismParticles.forEach((p) => {
+          // Color depends on eventual fate (hidden variable for viz) or neutral blue
+          // Let's keep them generic blue-ish until they hit
+          const color =
+            p.fate === 0 ? "rgba(74, 170, 255, 0.5)" : "rgba(244, 63, 94, 0.5)";
+          drawWavePacket(ctx, p.x, p.y, p.phase, color);
+        });
+      }
+
+      function drawBlochAndStats() {
+        const ctx = ctxs.bloch;
+        const w = 260,
+          h = 260,
+          cx = 130,
+          cy = 130,
+          R = 90;
+        ctx.clearRect(0, 0, w, h);
+
+        ctx.strokeStyle = "#444";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.strokeStyle = "#333";
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - R);
+        ctx.lineTo(cx, cy + R);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(cx - R, cy);
+        ctx.lineTo(cx + R, cy);
+        ctx.stroke();
+
+        const x = Math.sin(state.theta) * R;
+        const y = -Math.cos(state.theta) * R;
+        ctx.strokeStyle = "#4af";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + x, cy + y);
+        ctx.stroke();
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.arc(cx + x, cy + y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#aaa";
+        ctx.font = "12px monospace";
+        ctx.fillText("|0⟩", cx - 10, cy - R - 10);
+        ctx.fillText("|1⟩", cx - 10, cy + R + 20);
+
+        const pCtx = ctxs.prob;
+        pCtx.clearRect(0, 0, 260, 120);
+        const p0 = Math.pow(Math.cos(state.theta / 2), 2);
+        const p1 = Math.pow(Math.sin(state.theta / 2), 2);
+
+        pCtx.fillStyle = "#4af";
+        pCtx.fillRect(10, 10, p0 * 200, 20);
+        pCtx.fillStyle = "#fff";
+        pCtx.fillText((p0 * 100).toFixed(0) + "%", 220, 25);
+        pCtx.fillStyle = "#f43f5e";
+        pCtx.fillRect(10, 50, p1 * 200, 20);
+        pCtx.fillStyle = "#fff";
+        pCtx.fillText((p1 * 100).toFixed(0) + "%", 220, 65);
+      }
+
+      /* --- LOOP & CONTROLS --- */
+      function loop() {
+        state.time += 0.2; // Advance wave time
+
+        if (state.autoFire && Math.random() < 0.15) fire();
+
+        for (let i = state.slitParticles.length - 1; i >= 0; i--) {
+          if (state.slitParticles[i].update()) state.slitParticles.splice(i, 1);
+        }
+        for (let i = state.prismParticles.length - 1; i >= 0; i--) {
+          if (state.prismParticles[i].update())
+            state.prismParticles.splice(i, 1);
+        }
+
+        if (state.flash0 > 0) state.flash0--;
+        if (state.flash1 > 0) state.flash1--;
+
+        drawSlitSystem();
+        drawPrismSystem();
+        drawBlochAndStats();
+
+        document.getElementById("count0").innerText = state.counts.zero;
+        document.getElementById("count1").innerText = state.counts.one;
+
+        requestAnimationFrame(loop);
+      }
+
+      function fire() {
+        state.slitParticles.push(new SlitPhoton(state.theta));
+        state.prismParticles.push(new PrismParticle(state.theta));
+      }
+
+      document.getElementById("thetaSlider").addEventListener("input", (e) => {
+        state.theta = parseFloat(e.target.value);
+        document.getElementById("thetaDisplay").innerText =
+          state.theta.toFixed(2) + " rad";
+      });
+      document.getElementById("btnFire").addEventListener("click", fire);
+      document.getElementById("btnAuto").addEventListener("click", (e) => {
+        state.autoFire = !state.autoFire;
+        e.target.innerText = state.autoFire
+          ? "Auto-Fire: ON"
+          : "Auto-Fire: OFF";
+        e.target.classList.toggle("secondary");
+      });
+      document.getElementById("btnReset").addEventListener("click", () => {
+        state.counts = { zero: 0, one: 0 };
+        state.slitImpacts = [];
+        state.slitParticles = [];
+        state.prismParticles = [];
+      });
+
+      loop();
+    </script>
+  </body>
+</html>
