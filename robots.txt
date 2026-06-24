@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Allow: /llms.txt
+Allow: /humans.txt
 
 Sitemap: https://enesberksakalli.github.io/sitemap.xml

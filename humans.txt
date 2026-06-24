@@ -1,0 +1,28 @@
+/* TEAM */
+
+Name: Enes Sakalli
+Also known as: Enes Berk Sakalli
+Role: Bioinformatician, researcher, software developer, musician, visual artist
+Location: Vienna, Austria
+Website: https://enesberksakalli.github.io/
+Google Scholar: https://scholar.google.com/citations?user=N-sKeu4AAAAJ&hl=en&oi=ao
+ORCID: https://orcid.org/0009-0009-5027-2470
+GitHub: https://github.com/enesBerkSakalli
+LinkedIn: https://www.linkedin.com/in/enes-berk-sakalli-33856b150/
+CIBIV: https://www.cibiv.at/people/enes/
+University of Vienna: https://ufind.univie.ac.at/en/person.html?id=105740
+LBI-NetMed: https://netmed.lbg.ac.at/team/enes-sakalli/
+
+/* RESEARCH */
+
+Focus: bioinformatics, computational biology, phylogenetics, scientific visualization
+Project: Phylo-Movies - https://enesberksakalli.github.io/phylo-movies/
+Publication: When the Past Fades: Detecting Phylogenetic Signal with SatuTe - https://doi.org/10.1093/molbev/msaf090
+Preprint: Phylo-Movies: Animating Phylogenetic Trees from Sliding-Window Analyses - https://doi.org/10.64898/2026.04.01.715821
+Thesis: Sequential animation of phylogenetic trees - https://doi.org/10.25365/thesis.71559
+Visual art: Scales across Frames - https://art.lbi-netmed.com/
+
+/* SITE */
+
+Language: English
+Standards: HTML5, CSS, Schema.org JSON-LD, Open Graph, Twitter Cards

@@ -1,0 +1,36 @@
+# Enes Sakalli
+
+Enes Sakalli, also known as Enes Berk Sakalli, is a bioinformatician, researcher, software developer, musician, and visual artist based in Vienna, Austria.
+
+## Primary URLs
+
+- Website: https://enesberksakalli.github.io/
+- About: https://enesberksakalli.github.io/about.html
+- Google Scholar: https://scholar.google.com/citations?user=N-sKeu4AAAAJ&hl=en&oi=ao
+- ORCID: https://orcid.org/0009-0009-5027-2470
+- GitHub: https://github.com/enesBerkSakalli
+- LinkedIn: https://www.linkedin.com/in/enes-berk-sakalli-33856b150/
+- CIBIV profile: https://www.cibiv.at/people/enes/
+- University of Vienna profile: https://ufind.univie.ac.at/en/person.html?id=105740
+- LBI-NetMed profile: https://netmed.lbg.ac.at/team/enes-sakalli/
+
+## Research Identity
+
+- Name variants: Enes Sakalli, Enes Berk Sakalli
+- Google Scholar profile ID: N-sKeu4AAAAJ
+- ORCID: 0009-0009-5027-2470
+- Affiliations referenced on the site: Center for Integrative Bioinformatics Vienna, University of Vienna, Ludwig Boltzmann Institute for Network Medicine
+
+## Main Research and Software
+
+- Phylo-Movies: browser-based scientific visualization tool for animating topological changes between phylogenetic trees from sliding-window analyses.
+- Phylo-Movies URL: https://enesberksakalli.github.io/phylo-movies/
+- Phylo-Movies source: https://github.com/enesBerkSakalli/phylo-movies
+- Phylo-Movies preprint: https://doi.org/10.64898/2026.04.01.715821
+- University of Vienna thesis: Sequential animation of phylogenetic trees, 2022, DOI 10.25365/thesis.71559, https://utheses.univie.ac.at/detail/62915
+- SatuTe article: When the Past Fades: Detecting Phylogenetic Signal with SatuTe, Molecular Biology and Evolution, 2025, DOI 10.1093/molbev/msaf090
+- Visual art: Scales across Frames, Ludwig Boltzmann Institute for Network Medicine, 2025, https://art.lbi-netmed.com/
+
+## Site Notes
+
+The homepage and about page include Schema.org JSON-LD for Person, WebSite, SoftwareApplication, affiliations, ORCID, Google Scholar, Phylo-Movies, and selected scholarly works.

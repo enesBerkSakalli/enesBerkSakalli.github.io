@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Enes Sakalli | Enes Berk Sakalli | Bioinformatics, Phylo-Movies, Music</title>
+    <title>Enes Sakalli (Enes Berk Sakalli) | Research, Music & Phylo-Movies</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Enes Sakalli, also known as Enes Berk Sakalli, is a bioinformatician, researcher, musician, and visual artist in Vienna. Explore Phylo-Movies, research links, interactive tools, music, and visual systems."
+      content="Enes Sakalli, also Enes Berk Sakalli, is a Vienna bioinformatician, Phylo-Movies creator, researcher, musician, and visual artist."
     />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://enesberksakalli.github.io/" />
+    <link rel="me" href="https://orcid.org/0009-0009-5027-2470" />
+    <link rel="me" href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao" />
+    <link rel="me" href="https://github.com/enesBerkSakalli" />
+    <link rel="me" href="https://www.linkedin.com/in/enes-berk-sakalli-33856b150/" />
+    <link rel="alternate" type="text/plain" title="LLM summary" href="./llms.txt" />
+    <link rel="author" type="text/plain" title="Human-readable credits" href="./humans.txt" />
 
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
@@ -17,12 +23,6 @@
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
     />
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-      crossorigin="anonymous"
-    ></script>
 
     <link
       href="https://bootswatch.com/5/lux/bootstrap.css"
@@ -33,6 +33,268 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <style>
+      :root {
+        --page-bg: #f7f8f5;
+        --surface: #ffffff;
+        --ink: #171717;
+        --muted: #5e625d;
+        --line: #d8ddd4;
+        --green: #2f6f5e;
+        --blue: #315c7a;
+        --red: #9b3d3d;
+        --shadow: 0 18px 45px rgba(23, 23, 23, 0.08);
+      }
+
+      body {
+        background: var(--page-bg);
+        color: var(--ink);
+      }
+
+      body,
+      p,
+      a,
+      li {
+        letter-spacing: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        letter-spacing: 0;
+      }
+
+      .container {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 1120px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        width: 100%;
+      }
+
+      .site-nav {
+        border-bottom: 1px solid var(--line);
+        background: rgba(247, 248, 245, 0.96);
+      }
+
+      .site-nav .container {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: space-between;
+        padding-bottom: 0.8rem;
+        padding-top: 0.8rem;
+      }
+
+      .site-mark {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.15rem;
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .site-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 1rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .site-nav .nav-link {
+        color: var(--ink);
+        padding: 0;
+      }
+
+      .site-nav .nav-link:hover,
+      .site-nav .nav-link:focus {
+        color: var(--green);
+      }
+
+      .hero {
+        padding: 4rem 0 3rem;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
+        gap: 2.5rem;
+        align-items: center;
+      }
+
+      .eyebrow {
+        color: var(--green);
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.4rem, 7vw, 5.8rem);
+        line-height: 0.96;
+        margin: 0.6rem 0 1rem;
+      }
+
+      .hero-lede {
+        color: var(--ink);
+        font-size: 1.2rem;
+        line-height: 1.65;
+        max-width: 780px;
+      }
+
+      .identity-links,
+      .text-link-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 1.25rem;
+      }
+
+      .identity-link {
+        align-items: center;
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        color: #fff;
+        display: inline-flex;
+        font-weight: 700;
+        gap: 0.45rem;
+        padding: 0.78rem 1rem;
+        text-decoration: none;
+      }
+
+      .identity-link.secondary {
+        background: transparent;
+        color: var(--ink);
+      }
+
+      .identity-link:hover,
+      .identity-link:focus {
+        background: var(--green);
+        border-color: var(--green);
+        color: #fff;
+      }
+
+      .portrait-panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 1rem;
+      }
+
+      .portrait-panel img {
+        aspect-ratio: 1;
+        border-radius: 6px;
+        object-fit: cover;
+        width: 100%;
+      }
+
+      .portrait-caption {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin: 0.8rem 0 0;
+      }
+
+      .section-band {
+        border-top: 1px solid var(--line);
+        padding: 3rem 0;
+      }
+
+      .section-heading {
+        font-family: Georgia, "Times New Roman", serif;
+        margin-bottom: 1.25rem;
+      }
+
+      .research-grid,
+      .link-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .research-card,
+      .link-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: inherit;
+        min-height: 100%;
+        padding: 1.15rem;
+        text-decoration: none;
+      }
+
+      .research-card h3,
+      .link-card h3 {
+        font-size: 1.05rem;
+        margin-bottom: 0.65rem;
+      }
+
+      .research-meta {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .research-card a,
+      .text-link-row a,
+      .site-footer a {
+        color: var(--blue);
+        font-weight: 700;
+      }
+
+      .model-section {
+        display: grid;
+        grid-template-columns: minmax(0, 0.7fr) minmax(300px, 1fr);
+        gap: 1.5rem;
+        align-items: center;
+      }
+
+      model-viewer {
+        background: #eef2ee;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        min-height: 320px;
+        width: 100%;
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        padding: 2rem 0;
+      }
+
+      @media (max-width: 900px) {
+        .hero-grid,
+        .model-section,
+        .research-grid,
+        .link-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          padding-top: 2.5rem;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .site-nav .container {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .hero h1 {
+          font-size: 2.45rem;
+        }
+
+        .identity-link {
+          justify-content: center;
+          width: 100%;
+        }
+      }
+    </style>
 
     <link
       rel="apple-touch-icon"
@@ -57,8 +319,10 @@
       name="keywords"
       content="Enes Sakalli, Enes Berk Sakalli, bioinformatics, computational biology, phylogenetics, phylogenetic trees, Phylo-Movies, sliding-window analysis, recombination detection, Google Scholar, Vienna, music, visual art, interactive tools"
     />
-    <meta name="author" content="Enes Berk Sakalli" />
+    <meta name="author" content="Enes Sakalli, Enes Berk Sakalli" />
     <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Enes Sakalli" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content="Enes Sakalli | Enes Berk Sakalli" />
     <meta
       property="og:url"
@@ -68,22 +332,22 @@
       property="og:image"
       content="https://enesberksakalli.github.io/assets/pictures/enesberksakalli.jpg"
     />
+    <meta property="og:image:alt" content="Portrait of Enes Sakalli" />
     <meta
       property="og:description"
-      content="Bioinformatics, phylogenetics, Phylo-Movies, music, and visual art by Enes Sakalli / Enes Berk Sakalli."
+      content="Bioinformatics, phylogenetics, Phylo-Movies, SatuTe, scientific visualization, music, and visual art by Enes Sakalli / Enes Berk Sakalli."
     />
-    <meta property="profile:first_name" content="Enes " />
-    <meta property="profile:last_name" content="Berk" />
-    <meta property="profile:username" content="sakallie42" />
+    <meta property="profile:first_name" content="Enes" />
+    <meta property="profile:last_name" content="Sakalli" />
+    <meta property="profile:username" content="enesBerkSakalli" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@EnesBerkZeki" />
     <meta
       name="twitter:title"
       content="Enes Sakalli | Enes Berk Sakalli"
     />
     <meta
       name="twitter:description"
-      content="Bioinformatics, phylogenetics, Phylo-Movies, music, and visual art by Enes Sakalli / Enes Berk Sakalli."
+      content="Bioinformatics, phylogenetics, Phylo-Movies, SatuTe, scientific visualization, music, and visual art by Enes Sakalli / Enes Berk Sakalli."
     />
     <meta
       name="twitter:image"
@@ -98,270 +362,304 @@
       {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "Enes Berk Sakalli",
-        "alternateName": "Enes Sakalli",
+        "@id": "https://enesberksakalli.github.io/#enes-sakalli",
+        "name": "Enes Sakalli",
+        "alternateName": "Enes Berk Sakalli",
         "url": "https://enesberksakalli.github.io/",
         "image": "https://enesberksakalli.github.io/assets/pictures/enesberksakalli.jpg",
         "jobTitle": "Bioinformatician",
+        "affiliation": [
+          {
+            "@type": "Organization",
+            "name": "Center for Integrative Bioinformatics Vienna"
+          },
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "University of Vienna"
+          },
+          {
+            "@type": "Organization",
+            "name": "Ludwig Boltzmann Institute for Network Medicine"
+          }
+        ],
+        "identifier": [
+          {
+            "@type": "PropertyValue",
+            "propertyID": "ORCID",
+            "value": "0009-0009-5027-2470",
+            "url": "https://orcid.org/0009-0009-5027-2470"
+          },
+          {
+            "@type": "PropertyValue",
+            "propertyID": "Google Scholar",
+            "value": "N-sKeu4AAAAJ",
+            "url": "https://scholar.google.com/citations?user=N-sKeu4AAAAJ&hl=en&oi=ao"
+          }
+        ],
         "knowsAbout": [
           "Bioinformatics",
           "Computational biology",
           "Phylogenetics",
           "Phylo-Movies",
+          "Scientific visualization",
           "Music",
           "Visual art"
         ],
         "sameAs": [
           "https://www.linkedin.com/in/enes-berk-sakalli-33856b150/",
-          "https://twitter.com/EnesBerkZeki",
           "https://www.instagram.com/enesberksakalli/",
           "https://orcid.org/0009-0009-5027-2470",
           "https://scholar.google.com/citations?user=N-sKeu4AAAAJ&hl=en&oi=ao",
+          "https://www.cibiv.at/people/enes/",
+          "https://ufind.univie.ac.at/en/person.html?id=105740",
+          "https://netmed.lbg.ac.at/team/enes-sakalli/",
+          "https://github.com/enesBerkSakalli",
           "https://enesberksakalli.github.io/phylo-movies/",
           "https://github.com/enesBerkSakalli/phylo-movies"
+        ],
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://enesberksakalli.github.io/"
+        },
+        "subjectOf": [
+          {
+            "@type": "ScholarlyArticle",
+            "name": "When the Past Fades: Detecting Phylogenetic Signal with SatuTe",
+            "url": "https://academic.oup.com/mbe/article/42/5/msaf090/8151464",
+            "sameAs": "https://doi.org/10.1093/molbev/msaf090",
+            "datePublished": "2025-05-27",
+            "isPartOf": {
+              "@type": "Periodical",
+              "name": "Molecular Biology and Evolution"
+            }
+          },
+          {
+            "@type": "ScholarlyArticle",
+            "name": "Phylo-Movies: Animating Phylogenetic Trees from Sliding-Window Analyses",
+            "url": "https://www.biorxiv.org/content/10.64898/2026.04.01.715821v1",
+            "sameAs": "https://doi.org/10.64898/2026.04.01.715821",
+            "datePublished": "2026-04-01"
+          },
+          {
+            "@type": "CreativeWork",
+            "name": "Sequential animation of phylogenetic trees",
+            "url": "https://utheses.univie.ac.at/detail/62915",
+            "sameAs": "https://doi.org/10.25365/thesis.71559",
+            "datePublished": "2022",
+            "publisher": {
+              "@type": "CollegeOrUniversity",
+              "name": "University of Vienna"
+            }
+          },
+          {
+            "@type": "CreativeWork",
+            "name": "Scales across Frames",
+            "url": "https://art.lbi-netmed.com/",
+            "datePublished": "2025",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Ludwig Boltzmann Institute for Network Medicine"
+            }
+          }
         ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://enesberksakalli.github.io/#website",
+        "url": "https://enesberksakalli.github.io/",
+        "name": "Enes Sakalli",
+        "alternateName": "Enes Berk Sakalli",
+        "publisher": {
+          "@id": "https://enesberksakalli.github.io/#enes-sakalli"
+        },
+        "inLanguage": "en"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "@id": "https://enesberksakalli.github.io/phylo-movies/#software",
+        "name": "Phylo-Movies",
+        "url": "https://enesberksakalli.github.io/phylo-movies/",
+        "applicationCategory": "Scientific visualization tool",
+        "operatingSystem": "Web browser",
+        "description": "Phylo-Movies is a web-based tool for visualizing and animating topological changes between phylogenetic trees.",
+        "codeRepository": "https://github.com/enesBerkSakalli/phylo-movies",
+        "citation": "https://doi.org/10.64898/2026.04.01.715821",
+        "creator": {
+          "@id": "https://enesberksakalli.github.io/#enes-sakalli"
+        }
       }
     </script>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          <span><i class="fa fa-fal"></i></span>
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarColor03"
-          aria-controls="navbarColor03"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarColor03">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="./index.html">
-                <span><i class="fa fa-home"></i></span>Home
-                <span class="visually-hidden">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="https://www.instagram.com/enesberksakalli/?hl=en"
-              >
-                <i class="fa fa-instagram"></i>
-                Instagram
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="https://twitter.com/EnesBerkZeki">
-                <i class="fa fa-twitter" aria-hidden="true"></i>
-                Twitter
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="https://www.linkedin.com/in/enes-berk-sakalli-33856b150/"
-              >
-                <i class="fa fa-linkedin" aria-hidden="true"></i>
-                Linkedin
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao"
-              >
-                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                Google Scholar
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="https://enesberksakalli.github.io/phylo-movies/"
-              >
-                <i class="fa fa-film" aria-hidden="true"></i>
-                Phylo-Movies
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="./okto-kraken-synth/index.html">
-                <i class="fa fa-simplybuilt" aria-hidden="true"></i>
-                Okto Kraken Synth
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="./quantum/index.html">
-                <i class="fa fa-cogs" aria-hidden="true"></i>
-                Quantum
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="./about.html">
-                <i class="fa fa-info-circle" aria-hidden="true"></i>
-                About</a
-              >
-            </li>
-          </ul>
-        </div>
+    <nav class="site-nav navbar navbar-expand-lg">
+      <div class="container">
+        <a class="site-mark" href="./index.html">Enes Sakalli</a>
+        <ul class="site-links" aria-label="Primary navigation">
+          <li><a class="nav-link" href="#research">Research</a></li>
+          <li><a class="nav-link" href="https://enesberksakalli.github.io/phylo-movies/">Phylo-Movies</a></li>
+          <li><a class="nav-link" href="#projects">Projects</a></li>
+          <li><a class="nav-link" href="./about.html">About</a></li>
+        </ul>
       </div>
     </nav>
 
-    <div class="container">
-      <div class="row">
-        <model-viewer
-          src="./assets/objects/cell_shaded_double_helix.glb"
-          ar
-          ar-modes="webxr scene-viewer quick-look"
-          camera-controls
-          poster="./assets/objects/poster.webp"
-          shadow-intensity="1"
-          camera-orbit="0deg 75deg 555.1m"
-          field-of-view="12deg"
-          autoplay
-          style="height: 400px"
-        >
-          <div class="progress-bar hide" slot="progress-bar">
-            <div class="update-bar"></div>
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Bioinformatics · phylogenetics · scientific visualization</p>
+            <h1>Enes Sakalli <span>(Enes Berk Sakalli)</span></h1>
+            <p class="hero-lede">
+              I build tools for phylogenetic analysis and scientific visualization, including Phylo-Movies.
+              My research identity is connected through Google Scholar, ORCID, and publications on SatuTe and
+              phylogenetic tree animation, alongside music and visual systems work.
+            </p>
+            <p>
+              Center for Integrative Bioinformatics Vienna, University of Vienna, and Ludwig Boltzmann Institute for Network Medicine.
+            </p>
+            <div class="identity-links">
+              <a class="identity-link" href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao" rel="me">
+                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                Google Scholar
+              </a>
+              <a class="identity-link secondary" href="https://orcid.org/0009-0009-5027-2470" rel="me">
+                <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                ORCID
+              </a>
+              <a class="identity-link secondary" href="https://github.com/enesBerkSakalli" rel="me">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                GitHub
+              </a>
+              <a class="identity-link secondary" href="https://enesberksakalli.github.io/phylo-movies/">
+                <i class="fa fa-film" aria-hidden="true"></i>
+                Phylo-Movies
+              </a>
+            </div>
           </div>
-          <button slot="ar-button" id="ar-button">View in your space</button>
-        </model-viewer>
-      </div>
-    </div>
+          <aside class="portrait-panel" aria-label="Portrait and identifiers">
+            <img src="./assets/pictures/enesberksakalli.jpg" alt="Enes Sakalli, also known as Enes Berk Sakalli" />
+            <p class="portrait-caption">
+              Also publishing as Enes Berk Sakalli. Scholar profile N-sKeu4AAAAJ · ORCID 0009-0009-5027-2470.
+            </p>
+          </aside>
+        </div>
+      </section>
 
-    <div class="mt-1">
-      <div class="text-center">
-        <h1>Enes Sakalli</h1>
-        <p class="lead">
-          Bioinformatics, phylogenetics, music, and visual systems. Also publishing as Enes Berk Sakalli.
-        </p>
-      </div>
-    </div>
+      <section id="research" class="section-band">
+        <div class="container">
+          <h2 class="section-heading">Selected Research and Software</h2>
+          <div class="research-grid">
+            <article class="research-card">
+              <p class="eyebrow">Software · 2026</p>
+              <h3>Phylo-Movies</h3>
+              <p class="research-meta">Scientific visualization software and bioRxiv preprint.</p>
+              <p>
+                Animates phylogenetic tree sequences from sliding-window analyses to inspect recombination and topological conflict.
+                The project traces back to the University of Vienna thesis "Sequential animation of phylogenetic trees."
+              </p>
+              <div class="text-link-row">
+                <a href="https://enesberksakalli.github.io/phylo-movies/">Open tool</a>
+                <a href="https://www.biorxiv.org/content/10.64898/2026.04.01.715821v1">Read preprint</a>
+                <a href="https://utheses.univie.ac.at/detail/62915">Thesis</a>
+              </div>
+            </article>
+            <article class="research-card">
+              <p class="eyebrow">Article · 2025</p>
+              <h3>When the Past Fades: Detecting Phylogenetic Signal with SatuTe</h3>
+              <p class="research-meta">Molecular Biology and Evolution. DOI: 10.1093/molbev/msaf090.</p>
+              <p>
+                A phylogenetics article on detecting signal and saturation in sequence data, authored as Enes Sakalli.
+              </p>
+              <div class="text-link-row">
+                <a href="https://academic.oup.com/mbe/article/42/5/msaf090/8151464">Read article</a>
+              </div>
+            </article>
+            <article class="research-card">
+              <p class="eyebrow">Identity</p>
+              <h3>Research profiles</h3>
+              <p class="research-meta">Name variants: Enes Sakalli and Enes Berk Sakalli.</p>
+              <p>
+                Persistent identifiers connect publications, software, and profile pages across search indexes.
+              </p>
+              <div class="text-link-row">
+                <a href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao" rel="me">Google Scholar</a>
+                <a href="https://orcid.org/0009-0009-5027-2470" rel="me">ORCID</a>
+                <a href="https://www.cibiv.at/people/enes/">CIBIV</a>
+                <a href="https://ufind.univie.ac.at/en/person.html?id=105740">University profile</a>
+                <a href="https://netmed.lbg.ac.at/team/enes-sakalli/">LBI-NetMed</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
 
-    <main class="container py-4">
-      <section class="row gy-3">
-        <div class="col-md-6">
-          <h2 class="h4">Research</h2>
-          <p>
-            I build computational biology tools for phylogenetic tree analysis,
-            sequence comparison, and exploratory scientific visualization.
-          </p>
-          <a
-            class="btn btn-primary"
-            href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao"
-          >
-            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-            Google Scholar
+      <section id="projects" class="section-band">
+        <div class="container link-grid">
+          <a class="link-card" href="./okto-kraken-synth/index.html">
+            <h3><i class="fa fa-simplybuilt" aria-hidden="true"></i> Okto Kraken Synth</h3>
+            <p>Graph-driven synth and step sequencer experiment.</p>
+          </a>
+          <a class="link-card" href="./quantum/index.html">
+            <h3><i class="fa fa-cogs" aria-hidden="true"></i> Quantum</h3>
+            <p>Browser visualizations of wave collapse and measurement probabilities.</p>
+          </a>
+          <a class="link-card" href="https://art.lbi-netmed.com/">
+            <h3><i class="fa fa-picture-o" aria-hidden="true"></i> Scales across Frames</h3>
+            <p>Scientific visual art with the Ludwig Boltzmann Institute for Network Medicine.</p>
+          </a>
+          <a class="link-card" href="./about.html">
+            <h3><i class="fa fa-info-circle" aria-hidden="true"></i> About</h3>
+            <p>Research identity, affiliations, selected publications, and profile links.</p>
           </a>
         </div>
-        <div class="col-md-6">
-          <h2 class="h4">Phylo-Movies</h2>
-          <p>
-            Phylo-Movies animates topological changes between phylogenetic trees
-            from sliding-window analyses, recombination studies, and rogue-taxa
-            workflows.
-          </p>
-          <a
-            class="btn btn-primary"
-            href="https://enesberksakalli.github.io/phylo-movies/"
+      </section>
+
+      <section class="section-band">
+        <div class="container model-section">
+          <div>
+            <p class="eyebrow">Visual systems</p>
+            <h2 class="section-heading">Scientific structure as visual material</h2>
+            <p>
+              The site connects computational biology, interactive tools, music, and visual systems without hiding the research identity visitors are likely searching for.
+            </p>
+          </div>
+          <model-viewer
+            src="./assets/objects/cell_shaded_double_helix.glb"
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            camera-controls
+            poster="./assets/objects/poster.webp"
+            shadow-intensity="1"
+            camera-orbit="0deg 75deg 555.1m"
+            field-of-view="12deg"
+            autoplay
           >
-            <i class="fa fa-film" aria-hidden="true"></i>
-            Open Phylo-Movies
-          </a>
+            <div class="progress-bar hide" slot="progress-bar">
+              <div class="update-bar"></div>
+            </div>
+            <button slot="ar-button" id="ar-button">View in your space</button>
+          </model-viewer>
         </div>
       </section>
     </main>
 
-    <div class="d-lg-none pt-2">
-      <div class="card bg-primary m-5">
-        <div class="card-header text-center">
-          <span style="color: white">Social Media</span>
-          <div class="card-body">
-            <div class="d-flex aligns-items-center justify-content-center">
-              <div class="list-group">
-                <a
-                  class="list-group-item list-group-item-action active"
-                  href="https://www.instagram.com/enesberksakalli/?hl=en"
-                >
-                  <i class="fa fa-instagram"></i>
-                  Instagram
-                </a>
-
-                <a
-                  class="list-group-item list-group-item-action active"
-                  href="https://twitter.com/EnesBerkZeki"
-                >
-                  <i class="fa fa-twitter" aria-hidden="true"></i>
-                  Twitter
-                </a>
-
-                <a
-                  class="list-group-item list-group-item-action active"
-                  href="https://www.linkedin.com/in/enes-berk-sakalli-33856b150/"
-                >
-                  <i class="fa fa-linkedin" aria-hidden="true"></i>
-                  Linkedin
-                </a>
-
-                <a
-                  class="list-group-item list-group-item-action active"
-                  href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao"
-                >
-                  <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                  Google Scholar
-                </a>
-
-                <a
-                  class="list-group-item list-group-item-action active"
-                  href="https://enesberksakalli.github.io/phylo-movies/"
-                >
-                  <i class="fa fa-film" aria-hidden="true"></i>
-                  Phylo-Movies</a
-                >
-
-                <a
-                  class="list-group-item list-group-item-action active"
-                  href="./okto-kraken-synth/index.html"
-                >
-                  <i class="fa fa-simplybuilt" aria-hidden="true"></i>
-                  Okto Kraken Synth</a
-                >
-
-                <a
-                  class="list-group-item list-group-item-action active"
-                  href="./quantum/index.html"
-                >
-                  <i class="fa fa-cogs" aria-hidden="true"></i>
-                  Quantum</a
-                >
-
-                <a
-                  class="list-group-item list-group-item-action active"
-                  href="./about.html"
-                >
-                  <i class="fa fa-info-circle" aria-hidden="true"></i>
-                  About</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          Enes Sakalli · Enes Berk Sakalli ·
+          <a href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao" rel="me">Google Scholar</a> ·
+          <a href="https://orcid.org/0009-0009-5027-2470" rel="me">ORCID</a> ·
+          <a href="./llms.txt">llms.txt</a> ·
+          <a href="./humans.txt">humans.txt</a>
+        </p>
       </div>
-    </div>
+    </footer>
   </body>
 </html>
