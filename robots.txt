@@ -4,3 +4,5 @@ Allow: /llms.txt
 Allow: /humans.txt
 
 Sitemap: https://enesberksakalli.github.io/sitemap.xml
+Sitemap: https://enesberksakalli.github.io/phylo-movies/sitemap.xml
+Sitemap: https://enesberksakalli.github.io/phylo-movies/manual/sitemap.xml
