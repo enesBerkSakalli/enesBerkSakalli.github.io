@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Enes Sakalli (Enes Berk Sakalli) | Research, Music & Phylo-Movies</title>
+    <title>Enes Sakalli (Enes Berk Sakalli) | Bioinformatics</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Enes Sakalli, also Enes Berk Sakalli, is a Vienna bioinformatician, Phylo-Movies creator, researcher, musician, and visual artist."
+      content="I'm Enes Sakalli, also published as Enes Berk Sakalli. I build tools for phylogenetics and scientific visualization in Vienna, including Phylo-Movies."
     />
     <meta name="robots" content="index, follow" />
+    <meta name="google-site-verification" content="kdEmgK5GYFcbtDTl8PpHXP06uNDeJMREL6pkaetwkHk" />
     <link rel="canonical" href="https://enesberksakalli.github.io/" />
     <link rel="me" href="https://orcid.org/0009-0009-5027-2470" />
     <link rel="me" href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao" />
@@ -35,20 +36,27 @@
     />
     <style>
       :root {
-        --page-bg: #f7f8f5;
-        --surface: #ffffff;
-        --ink: #171717;
-        --muted: #5e625d;
-        --line: #d8ddd4;
-        --green: #2f6f5e;
-        --blue: #315c7a;
-        --red: #9b3d3d;
-        --shadow: 0 18px 45px rgba(23, 23, 23, 0.08);
+        --page-bg: #050605;
+        --surface: rgba(12, 14, 12, 0.64);
+        --ink: #f4f2ea;
+        --muted: #b6b7ae;
+        --line: rgba(244, 242, 234, 0.14);
+        --green: #8ec9a6;
+        --blue: #9fc5df;
+        --red: #d99191;
+        --shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
       }
 
       body {
         background: var(--page-bg);
         color: var(--ink);
+        min-height: 100vh;
       }
 
       body,
@@ -61,7 +69,35 @@
       h1,
       h2,
       h3 {
+        color: var(--ink);
         letter-spacing: 0;
+      }
+
+      .site-background {
+        height: 100%;
+        inset: 0;
+        pointer-events: none;
+        position: fixed;
+        width: 100%;
+        z-index: -2;
+      }
+
+      body::after {
+        background:
+          radial-gradient(circle at center, transparent 0, rgba(5, 6, 5, 0.2) 56%, rgba(5, 6, 5, 0.76) 100%),
+          linear-gradient(180deg, rgba(5, 6, 5, 0.15), rgba(5, 6, 5, 0.76));
+        content: "";
+        inset: 0;
+        pointer-events: none;
+        position: fixed;
+        z-index: -1;
+      }
+
+      main,
+      .site-nav,
+      .site-footer {
+        position: relative;
+        z-index: 1;
       }
 
       .container {
@@ -75,7 +111,8 @@
 
       .site-nav {
         border-bottom: 1px solid var(--line);
-        background: rgba(247, 248, 245, 0.96);
+        background: rgba(5, 6, 5, 0.76);
+        backdrop-filter: blur(18px);
       }
 
       .site-nav .container {
@@ -115,7 +152,7 @@
       }
 
       .hero {
-        padding: 4rem 0 3rem;
+        padding: 3.75rem 0 3rem;
       }
 
       .hero-grid {
@@ -128,13 +165,14 @@
       .eyebrow {
         color: var(--green);
         font-weight: 700;
+        overflow-wrap: anywhere;
         text-transform: uppercase;
       }
 
       .hero h1 {
         font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(2.4rem, 7vw, 5.8rem);
-        line-height: 0.96;
+        font-size: clamp(2.15rem, 5.4vw, 4.35rem);
+        line-height: 1.04;
         margin: 0.6rem 0 1rem;
       }
 
@@ -143,6 +181,7 @@
         font-size: 1.2rem;
         line-height: 1.65;
         max-width: 780px;
+        overflow-wrap: break-word;
       }
 
       .identity-links,
@@ -158,7 +197,7 @@
         background: var(--ink);
         border: 1px solid var(--ink);
         border-radius: 999px;
-        color: #fff;
+        color: #050605;
         display: inline-flex;
         font-weight: 700;
         gap: 0.45rem;
@@ -167,7 +206,7 @@
       }
 
       .identity-link.secondary {
-        background: transparent;
+        background: rgba(5, 6, 5, 0.28);
         color: var(--ink);
       }
 
@@ -175,7 +214,7 @@
       .identity-link:focus {
         background: var(--green);
         border-color: var(--green);
-        color: #fff;
+        color: #050605;
       }
 
       .portrait-panel {
@@ -183,6 +222,7 @@
         border: 1px solid var(--line);
         border-radius: 8px;
         box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
         padding: 1rem;
       }
 
@@ -213,7 +253,7 @@
       .link-grid {
         display: grid;
         gap: 1rem;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       }
 
       .research-card,
@@ -225,6 +265,7 @@
         min-height: 100%;
         padding: 1.15rem;
         text-decoration: none;
+        backdrop-filter: blur(18px);
       }
 
       .research-card h3,
@@ -253,7 +294,7 @@
       }
 
       model-viewer {
-        background: #eef2ee;
+        background: rgba(12, 14, 12, 0.72);
         border: 1px solid var(--line);
         border-radius: 8px;
         min-height: 320px;
@@ -286,7 +327,7 @@
         }
 
         .hero h1 {
-          font-size: 2.45rem;
+          font-size: 2.25rem;
         }
 
         .identity-link {
@@ -319,11 +360,11 @@
       name="keywords"
       content="Enes Sakalli, Enes Berk Sakalli, bioinformatics, computational biology, phylogenetics, phylogenetic trees, Phylo-Movies, sliding-window analysis, recombination detection, Google Scholar, Vienna, music, visual art, interactive tools"
     />
-    <meta name="author" content="Enes Sakalli, Enes Berk Sakalli" />
+    <meta name="author" content="Enes Sakalli" />
     <meta property="og:type" content="profile" />
     <meta property="og:site_name" content="Enes Sakalli" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content="Enes Sakalli | Enes Berk Sakalli" />
+    <meta property="og:title" content="Enes Sakalli (Enes Berk Sakalli) | Bioinformatics" />
     <meta
       property="og:url"
       content="https://enesberksakalli.github.io/"
@@ -335,7 +376,7 @@
     <meta property="og:image:alt" content="Portrait of Enes Sakalli" />
     <meta
       property="og:description"
-      content="Bioinformatics, phylogenetics, Phylo-Movies, SatuTe, scientific visualization, music, and visual art by Enes Sakalli / Enes Berk Sakalli."
+      content="I'm Enes Sakalli, also published as Enes Berk Sakalli. I build tools for phylogenetics and scientific visualization in Vienna, including Phylo-Movies."
     />
     <meta property="profile:first_name" content="Enes" />
     <meta property="profile:last_name" content="Sakalli" />
@@ -343,11 +384,11 @@
     <meta name="twitter:card" content="summary" />
     <meta
       name="twitter:title"
-      content="Enes Sakalli | Enes Berk Sakalli"
+      content="Enes Sakalli (Enes Berk Sakalli) | Bioinformatics"
     />
     <meta
       name="twitter:description"
-      content="Bioinformatics, phylogenetics, Phylo-Movies, SatuTe, scientific visualization, music, and visual art by Enes Sakalli / Enes Berk Sakalli."
+      content="I'm Enes Sakalli, also published as Enes Berk Sakalli. I build tools for phylogenetics and scientific visualization in Vienna, including Phylo-Movies."
     />
     <meta
       name="twitter:image"
@@ -361,67 +402,75 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Person",
-        "@id": "https://enesberksakalli.github.io/#enes-sakalli",
-        "name": "Enes Sakalli",
-        "alternateName": "Enes Berk Sakalli",
+        "@type": "ProfilePage",
+        "@id": "https://enesberksakalli.github.io/#profile",
         "url": "https://enesberksakalli.github.io/",
-        "image": "https://enesberksakalli.github.io/assets/pictures/enesberksakalli.jpg",
-        "jobTitle": "Bioinformatician",
-        "affiliation": [
-          {
-            "@type": "Organization",
-            "name": "Center for Integrative Bioinformatics Vienna"
-          },
-          {
-            "@type": "CollegeOrUniversity",
-            "name": "University of Vienna"
-          },
-          {
-            "@type": "Organization",
-            "name": "Ludwig Boltzmann Institute for Network Medicine"
-          }
-        ],
-        "identifier": [
-          {
-            "@type": "PropertyValue",
-            "propertyID": "ORCID",
-            "value": "0009-0009-5027-2470",
-            "url": "https://orcid.org/0009-0009-5027-2470"
-          },
-          {
-            "@type": "PropertyValue",
-            "propertyID": "Google Scholar",
-            "value": "N-sKeu4AAAAJ",
-            "url": "https://scholar.google.com/citations?user=N-sKeu4AAAAJ&hl=en&oi=ao"
-          }
-        ],
-        "knowsAbout": [
-          "Bioinformatics",
-          "Computational biology",
-          "Phylogenetics",
-          "Phylo-Movies",
-          "Scientific visualization",
-          "Music",
-          "Visual art"
-        ],
-        "sameAs": [
-          "https://www.linkedin.com/in/enes-berk-sakalli-33856b150/",
-          "https://www.instagram.com/enesberksakalli/",
-          "https://orcid.org/0009-0009-5027-2470",
-          "https://scholar.google.com/citations?user=N-sKeu4AAAAJ&hl=en&oi=ao",
-          "https://www.cibiv.at/people/enes/",
-          "https://ufind.univie.ac.at/en/person.html?id=105740",
-          "https://netmed.lbg.ac.at/team/enes-sakalli/",
-          "https://github.com/enesBerkSakalli",
-          "https://enesberksakalli.github.io/phylo-movies/",
-          "https://github.com/enesBerkSakalli/phylo-movies"
-        ],
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://enesberksakalli.github.io/"
+        "name": "Enes Sakalli (Enes Berk Sakalli) | Bioinformatics",
+        "description": "I'm Enes Sakalli, also published as Enes Berk Sakalli. I build tools for phylogenetics and scientific visualization in Vienna, including Phylo-Movies.",
+        "inLanguage": "en",
+        "isPartOf": {
+          "@id": "https://enesberksakalli.github.io/#website"
         },
-        "subjectOf": [
+        "mainEntity": {
+          "@type": "Person",
+          "@id": "https://enesberksakalli.github.io/#enes-sakalli",
+          "name": "Enes Sakalli",
+          "alternateName": "Enes Berk Sakalli",
+          "url": "https://enesberksakalli.github.io/",
+          "image": "https://enesberksakalli.github.io/assets/pictures/enesberksakalli.jpg",
+          "jobTitle": "Bioinformatician",
+          "affiliation": [
+            {
+              "@type": "Organization",
+              "name": "Center for Integrative Bioinformatics Vienna"
+            },
+            {
+              "@type": "CollegeOrUniversity",
+              "name": "University of Vienna"
+            },
+            {
+              "@type": "Organization",
+              "name": "Ludwig Boltzmann Institute for Network Medicine"
+            }
+          ],
+          "identifier": [
+            {
+              "@type": "PropertyValue",
+              "propertyID": "ORCID",
+              "value": "0009-0009-5027-2470",
+              "url": "https://orcid.org/0009-0009-5027-2470"
+            },
+            {
+              "@type": "PropertyValue",
+              "propertyID": "Google Scholar",
+              "value": "N-sKeu4AAAAJ",
+              "url": "https://scholar.google.com/citations?user=N-sKeu4AAAAJ&hl=en&oi=ao"
+            }
+          ],
+          "knowsAbout": [
+            "Bioinformatics",
+            "Computational biology",
+            "Phylogenetics",
+            "Phylo-Movies",
+            "Scientific visualization",
+            "Music",
+            "Visual art"
+          ],
+          "sameAs": [
+            "https://www.linkedin.com/in/enes-berk-sakalli-33856b150/",
+            "https://www.instagram.com/enesberksakalli/",
+            "https://orcid.org/0009-0009-5027-2470",
+            "https://scholar.google.com/citations?user=N-sKeu4AAAAJ&hl=en&oi=ao",
+            "https://www.cibiv.at/people/enes/",
+            "https://ufind.univie.ac.at/en/person.html?id=105740",
+            "https://netmed.lbg.ac.at/team/enes-sakalli/",
+            "https://github.com/enesBerkSakalli"
+          ],
+          "mainEntityOfPage": {
+            "@id": "https://enesberksakalli.github.io/#profile"
+          }
+        },
+        "mentions": [
           {
             "@type": "ScholarlyArticle",
             "name": "When the Past Fades: Detecting Phylogenetic Signal with SatuTe",
@@ -431,6 +480,23 @@
             "isPartOf": {
               "@type": "Periodical",
               "name": "Molecular Biology and Evolution"
+            },
+            "author": {
+              "@id": "https://enesberksakalli.github.io/#enes-sakalli"
+            }
+          },
+          {
+            "@type": "ScholarlyArticle",
+            "name": "Phylo-Movies: animating phylogenetic trees from sliding-window analyses",
+            "url": "https://academic.oup.com/mbe/article/43/8/msag194/8759530",
+            "sameAs": "https://doi.org/10.1093/molbev/msag194",
+            "datePublished": "2026-08-12",
+            "isPartOf": {
+              "@type": "Periodical",
+              "name": "Molecular Biology and Evolution"
+            },
+            "author": {
+              "@id": "https://enesberksakalli.github.io/#enes-sakalli"
             }
           },
           {
@@ -438,7 +504,10 @@
             "name": "Phylo-Movies: Animating Phylogenetic Trees from Sliding-Window Analyses",
             "url": "https://www.biorxiv.org/content/10.64898/2026.04.01.715821v1",
             "sameAs": "https://doi.org/10.64898/2026.04.01.715821",
-            "datePublished": "2026-04-01"
+            "datePublished": "2026-04-01",
+            "author": {
+              "@id": "https://enesberksakalli.github.io/#enes-sakalli"
+            }
           },
           {
             "@type": "CreativeWork",
@@ -449,6 +518,9 @@
             "publisher": {
               "@type": "CollegeOrUniversity",
               "name": "University of Vienna"
+            },
+            "author": {
+              "@id": "https://enesberksakalli.github.io/#enes-sakalli"
             }
           },
           {
@@ -459,6 +531,20 @@
             "publisher": {
               "@type": "Organization",
               "name": "Ludwig Boltzmann Institute for Network Medicine"
+            },
+            "creator": {
+              "@id": "https://enesberksakalli.github.io/#enes-sakalli"
+            }
+          },
+          {
+            "@type": "VisualArtwork",
+            "name": "Darwin's Gene Memories",
+            "alternateName": "Pangenome Housekeeping Trees",
+            "url": "https://enesberksakalli.github.io/pangenome/",
+            "datePublished": "2026",
+            "artMedium": "Interactive 3D visualization and DataDiVR project",
+            "creator": {
+              "@id": "https://enesberksakalli.github.io/#enes-sakalli"
             }
           }
         ]
@@ -489,7 +575,7 @@
         "operatingSystem": "Web browser",
         "description": "Phylo-Movies is a web-based tool for visualizing and animating topological changes between phylogenetic trees.",
         "codeRepository": "https://github.com/enesBerkSakalli/phylo-movies",
-        "citation": "https://doi.org/10.64898/2026.04.01.715821",
+        "citation": "https://doi.org/10.1093/molbev/msag194",
         "creator": {
           "@id": "https://enesberksakalli.github.io/#enes-sakalli"
         }
@@ -498,9 +584,10 @@
   </head>
 
   <body>
+    <canvas class="site-background" data-site-background aria-hidden="true"></canvas>
     <nav class="site-nav navbar navbar-expand-lg">
       <div class="container">
-        <a class="site-mark" href="./index.html">Enes Sakalli</a>
+        <a class="site-mark" href="./">Enes Sakalli</a>
         <ul class="site-links" aria-label="Primary navigation">
           <li><a class="nav-link" href="#research">Research</a></li>
           <li><a class="nav-link" href="https://enesberksakalli.github.io/phylo-movies/">Phylo-Movies</a></li>
@@ -515,11 +602,11 @@
         <div class="container hero-grid">
           <div>
             <p class="eyebrow">Bioinformatics · phylogenetics · scientific visualization</p>
-            <h1>Enes Sakalli <span>(Enes Berk Sakalli)</span></h1>
+            <h1>Enes Sakalli</h1>
             <p class="hero-lede">
+              I'm a bioinformatician in Vienna, also published as Enes Berk Sakalli.
               I build tools for phylogenetic analysis and scientific visualization, including Phylo-Movies.
-              My research identity is connected through Google Scholar, ORCID, and publications on SatuTe and
-              phylogenetic tree animation, alongside music and visual systems work.
+              I also work on music and visual systems.
             </p>
             <p>
               Center for Integrative Bioinformatics Vienna, University of Vienna, and Ludwig Boltzmann Institute for Network Medicine.
@@ -544,9 +631,9 @@
             </div>
           </div>
           <aside class="portrait-panel" aria-label="Portrait and identifiers">
-            <img src="./assets/pictures/enesberksakalli.jpg" alt="Enes Sakalli, also known as Enes Berk Sakalli" />
+            <img src="./assets/pictures/enesberksakalli.jpg" alt="Portrait of Enes Sakalli" />
             <p class="portrait-caption">
-              Also publishing as Enes Berk Sakalli. Scholar profile N-sKeu4AAAAJ · ORCID 0009-0009-5027-2470.
+              Scholar N-sKeu4AAAAJ · ORCID 0009-0009-5027-2470.
             </p>
           </aside>
         </div>
@@ -557,15 +644,16 @@
           <h2 class="section-heading">Selected Research and Software</h2>
           <div class="research-grid">
             <article class="research-card">
-              <p class="eyebrow">Software · 2026</p>
+              <p class="eyebrow">Software and article · 2026</p>
               <h3>Phylo-Movies</h3>
-              <p class="research-meta">Scientific visualization software and bioRxiv preprint.</p>
+              <p class="research-meta">Molecular Biology and Evolution. DOI: 10.1093/molbev/msag194.</p>
               <p>
                 Animates phylogenetic tree sequences from sliding-window analyses to inspect recombination and topological conflict.
                 The project traces back to the University of Vienna thesis "Sequential animation of phylogenetic trees."
               </p>
               <div class="text-link-row">
                 <a href="https://enesberksakalli.github.io/phylo-movies/">Open tool</a>
+                <a href="https://academic.oup.com/mbe/article/43/8/msag194/8759530">Read article</a>
                 <a href="https://www.biorxiv.org/content/10.64898/2026.04.01.715821v1">Read preprint</a>
                 <a href="https://utheses.univie.ac.at/detail/62915">Thesis</a>
               </div>
@@ -575,18 +663,18 @@
               <h3>When the Past Fades: Detecting Phylogenetic Signal with SatuTe</h3>
               <p class="research-meta">Molecular Biology and Evolution. DOI: 10.1093/molbev/msaf090.</p>
               <p>
-                A phylogenetics article on detecting signal and saturation in sequence data, authored as Enes Sakalli.
+                I coauthored this phylogenetics article on detecting signal and saturation in sequence data.
               </p>
               <div class="text-link-row">
                 <a href="https://academic.oup.com/mbe/article/42/5/msaf090/8151464">Read article</a>
               </div>
             </article>
             <article class="research-card">
-              <p class="eyebrow">Identity</p>
+              <p class="eyebrow">Profiles</p>
               <h3>Research profiles</h3>
-              <p class="research-meta">Name variants: Enes Sakalli and Enes Berk Sakalli.</p>
+              <p class="research-meta">Scholar, ORCID, and institutional pages.</p>
               <p>
-                Persistent identifiers connect publications, software, and profile pages across search indexes.
+                Persistent identifiers keep publications, software, and profile pages connected.
               </p>
               <div class="text-link-row">
                 <a href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao" rel="me">Google Scholar</a>
@@ -614,9 +702,13 @@
             <h3><i class="fa fa-picture-o" aria-hidden="true"></i> Scales across Frames</h3>
             <p>Scientific visual art with the Ludwig Boltzmann Institute for Network Medicine.</p>
           </a>
+          <a class="link-card" href="./pangenome/">
+            <h3><i class="fa fa-tree" aria-hidden="true"></i> Darwin's Gene Memories</h3>
+            <p>Stacked gene trees as an interactive DataDiVR and Plotly artwork.</p>
+          </a>
           <a class="link-card" href="./about.html">
             <h3><i class="fa fa-info-circle" aria-hidden="true"></i> About</h3>
-            <p>Research identity, affiliations, selected publications, and profile links.</p>
+            <p>Affiliations, selected publications, and profile links.</p>
           </a>
         </div>
       </section>
@@ -627,7 +719,7 @@
             <p class="eyebrow">Visual systems</p>
             <h2 class="section-heading">Scientific structure as visual material</h2>
             <p>
-              The site connects computational biology, interactive tools, music, and visual systems without hiding the research identity visitors are likely searching for.
+              I connect computational biology, interactive tools, music, and visual systems.
             </p>
           </div>
           <model-viewer
@@ -653,7 +745,7 @@
     <footer class="site-footer">
       <div class="container">
         <p>
-          Enes Sakalli · Enes Berk Sakalli ·
+          Research, software, music, and visual art ·
           <a href="https://scholar.google.com/citations?user=N-sKeu4AAAAJ&amp;hl=en&amp;oi=ao" rel="me">Google Scholar</a> ·
           <a href="https://orcid.org/0009-0009-5027-2470" rel="me">ORCID</a> ·
           <a href="./llms.txt">llms.txt</a> ·
@@ -661,5 +753,6 @@
         </p>
       </div>
     </footer>
+    <script src="./assets/site-background.js" defer></script>
   </body>
 </html>

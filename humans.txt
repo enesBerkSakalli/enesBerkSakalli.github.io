@@ -17,7 +17,9 @@ LBI-NetMed: https://netmed.lbg.ac.at/team/enes-sakalli/
 
 Focus: bioinformatics, computational biology, phylogenetics, scientific visualization
 Project: Phylo-Movies - https://enesberksakalli.github.io/phylo-movies/
+Artwork: Darwin's Gene Memories / Pangenome Housekeeping Trees - https://enesberksakalli.github.io/pangenome/
 Publication: When the Past Fades: Detecting Phylogenetic Signal with SatuTe - https://doi.org/10.1093/molbev/msaf090
+Publication: Phylo-Movies: animating phylogenetic trees from sliding-window analyses - https://doi.org/10.1093/molbev/msag194
 Preprint: Phylo-Movies: Animating Phylogenetic Trees from Sliding-Window Analyses - https://doi.org/10.64898/2026.04.01.715821
 Thesis: Sequential animation of phylogenetic trees - https://doi.org/10.25365/thesis.71559
 Visual art: Scales across Frames - https://art.lbi-netmed.com/
